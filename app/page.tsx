@@ -4,8 +4,8 @@ import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { toast, setPosition } from "@/registry/shadcn/toast/store"
-import type { ToastPosition } from "@/registry/shadcn/toast/store"
+import { toast, setPosition } from "@/registry/shadcn/toast"
+import type { ToastPosition } from "@/registry/shadcn/toast"
 import { Check, Copy } from "lucide-react"
 
 const positions: ToastPosition[] = ["top-left", "top-center", "top-right", "bottom-left", "bottom-center", "bottom-right"]
@@ -19,7 +19,6 @@ const INSTALL_COMMANDS = {
 
 function InstallCommand() {
   const [pm, setPm] = React.useState<keyof typeof INSTALL_COMMANDS>("npm")
-  const [env, setEnv] = React.useState<"local" | "production">("local")
   const [copied, setCopied] = React.useState(false)
 
   const commands = INSTALL_COMMANDS

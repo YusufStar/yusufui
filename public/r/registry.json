@@ -1,0 +1,33 @@
+{
+    "$schema": "https://ui.shadcn.com/schema/registry.json",
+    "name": "yusufstar",
+    "homepage": "https://yusufstar.com",
+    "items": [
+        {
+            "name": "toast",
+            "type": "registry:block",
+            "title": "Toast",
+            "description": "Beautiful toast notifications with stacking support, powered by Valtio and Framer Motion. Features 6 position options, promise handling, custom actions, and smooth animations.",
+            "dependencies": [
+                "valtio",
+                "framer-motion",
+                "lucide-react",
+                "class-variance-authority"
+            ],
+            "files": [
+                {
+                    "path": "registry/shadcn/toast/store.ts",
+                    "type": "registry:lib"
+                },
+                {
+                    "path": "registry/shadcn/toast/toast.tsx",
+                    "type": "registry:component"
+                },
+                {
+                    "path": "registry/shadcn/toast/toaster.tsx",
+                    "type": "registry:component"
+                }
+            ]
+        }
+    ]
+}

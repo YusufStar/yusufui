@@ -1,65 +1,155 @@
-import Image from "next/image";
+"use client"
+
+import * as React from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { toast, setPosition } from "@/registry/shadcn/toast/store"
+import type { ToastPosition } from "@/registry/shadcn/toast/store"
+import { Check, Copy } from "lucide-react"
+
+const positions: ToastPosition[] = ["top-left", "top-center", "top-right", "bottom-left", "bottom-center", "bottom-right"]
+
+const INSTALL_COMMANDS = {
+  npm: "npx shadcn@latest add http://localhost:3000/r/toast.json",
+  pnpm: "pnpm dlx shadcn@latest add http://localhost:3000/r/toast.json",
+  yarn: "yarn dlx shadcn@latest add http://localhost:3000/r/toast.json",
+  bun: "bunx shadcn@latest add http://localhost:3000/r/toast.json",
+}
+
+const PRODUCTION_COMMANDS = {
+  npm: "npx shadcn@latest add https://yusufstar.com/r/toast.json",
+  pnpm: "pnpm dlx shadcn@latest add https://yusufstar.com/r/toast.json",
+  yarn: "yarn dlx shadcn@latest add https://yusufstar.com/r/toast.json",
+  bun: "bunx shadcn@latest add https://yusufstar.com/r/toast.json",
+}
+
+function InstallCommand() {
+  const [pm, setPm] = React.useState<keyof typeof INSTALL_COMMANDS>("npm")
+  const [env, setEnv] = React.useState<"local" | "production">("local")
+  const [copied, setCopied] = React.useState(false)
+
+  const commands = env === "local" ? INSTALL_COMMANDS : PRODUCTION_COMMANDS
+  const command = commands[pm]
+
+  const copy = async () => {
+    await navigator.clipboard.writeText(command)
+    setCopied(true)
+    toast.success("Copied!", "Installation command copied to clipboard")
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Installation</CardTitle>
+        <CardDescription>Install the toast component in your project</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <Tabs value={env} onValueChange={(v) => setEnv(v as "local" | "production")}>
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="local">Local (Dev)</TabsTrigger>
+            <TabsTrigger value="production">Production</TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        <Tabs value={pm} onValueChange={(v) => setPm(v as keyof typeof INSTALL_COMMANDS)}>
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="npm">npm</TabsTrigger>
+            <TabsTrigger value="pnpm">pnpm</TabsTrigger>
+            <TabsTrigger value="yarn">yarn</TabsTrigger>
+            <TabsTrigger value="bun">bun</TabsTrigger>
+          </TabsList>
+          <div className="mt-4">
+            <div className="relative">
+              <pre className="rounded-lg bg-muted p-4 pr-12 text-sm overflow-x-auto"><code>{command}</code></pre>
+              <Button size="icon" variant="ghost" className="absolute right-2 top-2" onClick={copy}>
+                {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              </Button>
+            </div>
+          </div>
+        </Tabs>
+      </CardContent>
+    </Card>
+  )
+}
 
 export default function Home() {
+  const simulateApi = () => new Promise((resolve, reject) => setTimeout(() => Math.random() > 0.5 ? resolve("Data loaded!") : reject("Failed"), 2000))
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-background p-8">
+      <div className="mx-auto max-w-4xl space-y-8">
+        <div className="space-y-2 text-center">
+          <h1 className="text-4xl font-bold tracking-tight">Shadcn Toast</h1>
+          <p className="text-lg text-muted-foreground">Beautiful toast notifications with stacking, inspired by Sonner</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+
+        <InstallCommand />
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Toast Types</CardTitle>
+            <CardDescription>Different types of toast notifications</CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <Button variant="outline" onClick={() => toast.success("Success", "Operation completed")}>Success</Button>
+            <Button variant="outline" onClick={() => toast.error("Error", "Something went wrong")}>Error</Button>
+            <Button variant="outline" onClick={() => toast.info("Info", "Here's some information")}>Info</Button>
+            <Button variant="outline" onClick={() => toast.warning("Warning", "Please be careful")}>Warning</Button>
+            <Button variant="outline" onClick={() => { const id = toast.loading("Loading", "Please wait..."); setTimeout(() => toast.update(id, { type: "success", title: "Complete", description: "Task finished!", duration: 3000 }), 2500) }}>Loading</Button>
+            <Button variant="outline" onClick={() => toast.show({ title: "Default", description: "This is a default toast" })}>Default</Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Advanced</CardTitle>
+            <CardDescription>Promise handling, actions, and multiple toasts</CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-3 sm:grid-cols-2">
+            <Button variant="outline" onClick={() => toast.promise(simulateApi(), { loading: { title: "Loading", description: "Fetching..." }, success: (data) => ({ title: "Success", description: String(data) }), error: (err) => ({ title: "Error", description: String(err) }) })}>Promise</Button>
+            <Button variant="outline" onClick={() => { toast.info("First", "This is the first"); setTimeout(() => toast.success("Second", "This is the second"), 200); setTimeout(() => toast.warning("Third", "This is the third"), 400) }}>Multiple</Button>
+            <Button variant="outline" onClick={() => toast.show({ title: "Long Duration", description: "Stays for 10 seconds", duration: 10000 })}>Long Duration</Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Position</CardTitle>
+            <CardDescription>Change where toasts appear</CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-3 sm:grid-cols-3">
+            {positions.map((pos) => (
+              <Button key={pos} variant="outline" onClick={() => { setPosition(pos); toast.success("Position Changed", `Now at ${pos}`) }} className="capitalize">{pos.replace("-", " ")}</Button>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Usage</CardTitle>
+            <CardDescription>How to use the toast component</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <pre className="rounded-lg bg-muted p-4 text-sm overflow-x-auto"><code>{`import { toast } from "@/registry/shadcn/toast/store"
+
+// Simple
+toast.success("Success", "Operation completed")
+
+// Promise
+toast.promise(fetchData(), {
+  loading: { title: "Loading", description: "Fetching..." },
+  success: { title: "Success", description: "Done!" },
+  error: { title: "Error", description: "Failed" }
+})
+
+// Change position
+import { setPosition } from "@/registry/shadcn/toast/store"
+setPosition("top-center")`}</code></pre>
+          </CardContent>
+        </Card>
+      </div>
     </div>
-  );
+  )
 }

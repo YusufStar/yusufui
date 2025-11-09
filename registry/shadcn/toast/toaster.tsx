@@ -3,7 +3,7 @@
 import * as React from "react"
 import { useSnapshot } from "valtio"
 import { AnimatePresence, motion, PanInfo } from "framer-motion"
-import state, { toast as toastStore, type Toast as ToastData, type ToastPosition, pauseToast, resumeToast, setPosition, MAX_TOASTS, DEFAULT_DURATION, setMaxToasts, setDefaultDuration } from "./store"
+import state, { toast as toastStore, type Toast as ToastData, type ToastPosition, pauseToast, resumeToast, setPosition, MAX_TOASTS, DEFAULT_DURATION, setMaxToasts, setDefaultDuration } from "../lib/toast/store"
 import { Toast } from "./toast"
 
 export interface ToasterProps {

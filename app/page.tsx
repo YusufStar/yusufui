@@ -11,17 +11,10 @@ import { Check, Copy } from "lucide-react"
 const positions: ToastPosition[] = ["top-left", "top-center", "top-right", "bottom-left", "bottom-center", "bottom-right"]
 
 const INSTALL_COMMANDS = {
-  npm: "npx shadcn@latest add http://localhost:3000/r/toast.json",
-  pnpm: "pnpm dlx shadcn@latest add http://localhost:3000/r/toast.json",
-  yarn: "yarn dlx shadcn@latest add http://localhost:3000/r/toast.json",
-  bun: "bunx shadcn@latest add http://localhost:3000/r/toast.json",
-}
-
-const PRODUCTION_COMMANDS = {
-  npm: "npx shadcn@latest add https://yusufstar.com/r/toast.json",
-  pnpm: "pnpm dlx shadcn@latest add https://yusufstar.com/r/toast.json",
-  yarn: "yarn dlx shadcn@latest add https://yusufstar.com/r/toast.json",
-  bun: "bunx shadcn@latest add https://yusufstar.com/r/toast.json",
+  npm: "npx shadcn@latest add https://yusufui.vercel.app/r/toast.json",
+  pnpm: "pnpm dlx shadcn@latest add https://yusufui.vercel.app/r/toast.json",
+  yarn: "yarn dlx shadcn@latest add https://yusufui.vercel.app/r/toast.json",
+  bun: "bunx shadcn@latest add https://yusufui.vercel.app/r/toast.json",
 }
 
 function InstallCommand() {
@@ -29,7 +22,7 @@ function InstallCommand() {
   const [env, setEnv] = React.useState<"local" | "production">("local")
   const [copied, setCopied] = React.useState(false)
 
-  const commands = env === "local" ? INSTALL_COMMANDS : PRODUCTION_COMMANDS
+  const commands = INSTALL_COMMANDS
   const command = commands[pm]
 
   const copy = async () => {
@@ -46,13 +39,6 @@ function InstallCommand() {
         <CardDescription>Install the toast component in your project</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Tabs value={env} onValueChange={(v) => setEnv(v as "local" | "production")}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="local">Local (Dev)</TabsTrigger>
-            <TabsTrigger value="production">Production</TabsTrigger>
-          </TabsList>
-        </Tabs>
-
         <Tabs value={pm} onValueChange={(v) => setPm(v as keyof typeof INSTALL_COMMANDS)}>
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="npm">npm</TabsTrigger>

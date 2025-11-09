@@ -16,7 +16,7 @@
             ],
             "files": [
                 {
-                    "path": "registry/shadcn/toast/store.ts",
+                    "path": "registry/shadcn/lib/toast/store.ts",
                     "type": "registry:lib"
                 },
                 {
